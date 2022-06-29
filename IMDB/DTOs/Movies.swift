@@ -84,7 +84,7 @@ public struct MovieDetail: Hashable, Codable {
     public let runtime, genre, director, writer: String
     public let actors, plot, language, country: String
     public let awards, poster: String
-    public let ratings: String?
+    public let ratings: [MovieRating]?
     public let metascore, imdbRating, imdbVotes, imdbID: String
     public let type, dvd, boxOffice, production: String
 
@@ -114,6 +114,17 @@ public struct MovieDetail: Hashable, Codable {
 }
 
 
+
+public struct MovieRating: Codable, Hashable {
+    
+    let source, value: String
+    
+    enum CodingKeys: String, CodingKey {
+        case source = "Source"
+        case value = "Value"
+        
+    }
+}
 
 
 // MARK: - Movie List

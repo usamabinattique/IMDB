@@ -18,7 +18,7 @@ struct URLImage: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 130, height: 100)
-                .background(Color.gray)
+//                .background(Color.gray)
         } else {
             Image(systemName: "video")
                 .resizable()

@@ -9,7 +9,9 @@ import Foundation
 
 class MovieDetailViewModel: ObservableObject {
 
-    @Published var detail: MovieDetail!
+    @Published var detail: MovieDetail?
+    @Published var showToolbar: Bool = false
+
     var imdbID: String!
     
     init(id: String) {
@@ -29,11 +31,12 @@ class MovieDetailViewModel: ObservableObject {
           switch result {
           case let .success(detail):
               DispatchQueue.main.async {
+                  self.showToolbar = true
                   self.detail = detail
               }
           case let .failure(error):
               DispatchQueue.main.async {
-                  
+                 print("error")
               }
           }
         }

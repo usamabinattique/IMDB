@@ -23,7 +23,7 @@ struct ContentView: View {
                 SearchBar(searchText: $viewModel.movieTitle,
                           searching: $searching, viewModel: viewModel)
                 ResultView(viewModel: .constant(viewModel), searching: $searching)
-                    .padding(EdgeInsets(top: 0, leading: 10, bottom:0 , trailing: 0))
+                    .padding(EdgeInsets(top: 0, leading: 5, bottom:0 , trailing: 0))
                     .layoutPriority(1)
                 Spacer()
                 
@@ -56,19 +56,18 @@ struct ResultView: View {
     
     @Binding var viewModel: ViewModel
     @Binding var searching: Bool
-    @State var selectedItem: MovieID? = nil
-
+    @State var selectedItem: MovieID? = nil 
     
+    @State var isActive: Bool? = nil
+
     var body: some View {
         switch viewModel.responseType  {
             
         case let .list(items):
-            
-            
             List(items.search, id: \.self, selection: $selectedItem) { item in
                 
                 NavigationLink(destination: MovieDetailView(imdbID: item.imdbID)) {
-                    HStack {
+                    HStack(alignment: .center, spacing: 10) {
                         URLImage(urlString: item.poster)
                         VStack(alignment: .leading, spacing: 10) {
                             Text(item.title)
@@ -78,16 +77,6 @@ struct ResultView: View {
                     }
                 }
             }
-            
-//            List {
-//                ForEach(items.search, id: \.self) {
-//                }
-//            }
-//            .gesture(DragGesture()
-//                .onChanged({ _ in
-//                    UIApplication.shared.dismissKeyboard()
-//                })
-//            )
             
         case let .detail(detail):
             ProgressView()
