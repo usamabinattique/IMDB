@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MovieDetailView: View {
     @StateObject private var viewModel: MovieDetailViewModel
-    @State var showToolBarControls = false
-    
+    @State private var presentSheet = false
+
     // injecting view model
     init(imdbID: String) {
         _viewModel = StateObject(wrappedValue: MovieDetailViewModel(id: imdbID ))
@@ -31,26 +31,52 @@ struct MovieDetailView: View {
                 }
                 .padding()
                 
-                HStack(alignment: .center, spacing: 5) {
-                    Text("Release Date")
-                    Text(detail.released)
+                VStack(alignment: .leading) {
+                    HStack(spacing: 5) {
+                        Text("Release Date")
+                        Text(detail.released).font(Font.headline)
+                    }
+                    
+                    HStack(spacing: 5) {
+                        Text("IMDB Rating")
+                        Text(detail.imdbRating)
+                    }
                 }
+                
+              
+
                 
             } else {
                 Text("No Details found").bold()
             }
             
             Spacer()
-                .navigationTitle(viewModel.detail.isNil ? "Detail" : viewModel.detail!.title)
                 .toolbar {
                     if viewModel.showToolbar {
-                        Button("Share") { }
-                        .confirmationDialog("Share", isPresented: $viewModel.showToolbar) {
-                        Button("Email") {}
-                        Button("Whatsapp") {}
                         
-                        }
+                        HStack {
+                            
+                            Button{ }
+                            label: {
+                            Image(systemName: "heart")
+                            }
+                            
+                            Button("Share") {
+                                presentSheet = true
+                            }
+                            .confirmationDialog("Share", isPresented: $presentSheet) {
+                                Button("Email") {
+                                    let url = URL(string: "message://")
+                                    if let url = url {
+                                        if UIApplication.shared.canOpenURL(url) {
+                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                        }
+                                    }
+                                }
+                                Button("Whatsapp") {}
 
+                            }
+                        }
                     }
                 }
         }
@@ -66,17 +92,3 @@ struct MovieDetailView_Previews: PreviewProvider {
         MovieDetailView(imdbID: imdbID)
     }
 }
-
-
-//
-//Button("Share") { }
-//label:{
-//Label("Edit", systemImage: "pencil")
-//}
-//.confirmationDialog("Share", isPresented: $viewModel.showToolbar) {
-//Button("Red") {}
-//
-//Button("Green") { }
-//
-//Button("Blue") { }
-//}
