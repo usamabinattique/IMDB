@@ -17,18 +17,17 @@ struct FavourtiesView: View {
         private var movies: FetchedResults<Movie>
 
     var body: some View {
-        NavigationView {
-            
             List {
                 ForEach(movies) { item in
                     HStack(alignment: .center, spacing: 5) {
                         URLImage(urlString: item.poster!)
                         
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: 10) {
                             Text(item.title!)
                                 .bold()
                             
-                    
+                            Text(item.plot!).font(.footnote)
+                            
                             HStack {
                                 Text("Released").font(.caption)
                                 Text(item.releaseDate!).font(.footnote)
@@ -38,17 +37,17 @@ struct FavourtiesView: View {
                                 Text("IMDB Rating").font(.caption)
                                 Text(String(format: "%.1f/10", item.imdbRating)).font(.footnote)
                             }
-                        }
+                        }.padding([.top, .bottom])
                     }
                     .listRowInsets(EdgeInsets())
                 }.onDelete(perform: deleteItems)
             }
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
             }
-        }
     }
     
     private func deleteItems(offsets: IndexSet) {

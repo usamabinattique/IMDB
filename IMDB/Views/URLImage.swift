@@ -25,7 +25,7 @@ struct URLImage: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 130, height: 100)
                 .background(Color.gray)
-                .onAppear{
+                .onAppear {
                     fetchData()
                 }
         }

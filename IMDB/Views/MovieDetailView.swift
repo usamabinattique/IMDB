@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieDetailView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+
     @StateObject private var viewModel: MovieDetailViewModel
     @State private var presentSheet = false
     @State var isFavorited : Bool = false
@@ -47,7 +47,7 @@ struct MovieDetailView: View {
                 }
                 
             } else {
-                Text("No Details found").bold()
+                ProgressView().padding()
             }
             
             Spacer()
@@ -57,7 +57,7 @@ struct MovieDetailView: View {
                         HStack {
                             Button {
                                 self.isFavorited.toggle()
-                                isFavorited ? addItem() : deleteItem(detail: viewModel.detail!)
+                                isFavorited ? viewModel.addItem() : viewModel.deleteItem()
                             }
                             label: {
                                 Image(systemName: isFavorited ? "heart.fill" : "heart")
@@ -82,82 +82,11 @@ struct MovieDetailView: View {
                     }
                 }
         }
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             viewModel.fetchDetail()
         }
     }
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = Movie(context: viewContext)
-            newItem.title = viewModel.detail!.title
-            newItem.year = Int16(viewModel.detail!.year)!
-            newItem.poster = viewModel.detail!.poster
-            newItem.imdbRating = Float(viewModel.detail!.imdbRating)!
-            newItem.releaseDate = viewModel.detail!.released
-            
-            print(newItem)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-
-    private func deleteItem(detail: MovieDetail) {
-
-        
-        
-//        @FetchRequest(entity: Movie.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Movie.title, ascending: true)]) var movie: FetchedResults<Movie>
-//
-//        print(movie.first)
-//
-//
-//        if let movie = try? viewContext.existingObject(with: NSManagedObjectID) as? Movie {
-//                self.person = person
-//            }
-
-        withAnimation {
-            
-
-//            viewContext.delete
-//            offsets.map { items[$0] }.forEach(viewContext.delete)
-            
-//            viewContext.delete(movie.first!)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-//    private func deleteItems(offsets: IndexSet) {
-//
-//        let items: FetchedResults<Movie>
-//        withAnimation {
-//            offsets.map { items[$0] }.forEach(viewContext.delete)
-//
-//            do {
-//                try viewContext.save()
-//            } catch {
-//                // Replace this implementation with code to handle the error appropriately.
-//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//                let nsError = error as NSError
-//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-//            }
-//        }
-//    }
 }
 
 struct MovieDetailView_Previews: PreviewProvider {

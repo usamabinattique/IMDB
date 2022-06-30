@@ -14,8 +14,14 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            
+            let newMovie = Movie(context: viewContext)
+            newMovie.imdbID = "Titanic"
+            newMovie.title = "tt0330994"
+            newMovie.imdbRating = 7.8
+            newMovie.plot = "Titanic story"
+            newMovie.poster = "https://m.media-amazon.com/images/M/MV5BMTU3NTUyMTc3Nl5BMl5BanBnXkFtZTgwOTA2MDE3MTE@._V1_SX300.jpg"
+            
         }
         do {
             try viewContext.save()

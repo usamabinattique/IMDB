@@ -55,20 +55,6 @@ enum ResponseType: Decodable {
         
         self = .unknown
     }
-    
-//    @ViewBuilder
-//      func view() -> some View {
-//          switch self {
-//          case .list:
-//                  MenuView()
-//          case .detail:
-//                  SearchView()
-//          case .error:
-//                  ProfileView()
-//              case .unknown:
-//                  SettingsView()
-//          }
-//      }
 }
 
 struct ResponseError: Codable {

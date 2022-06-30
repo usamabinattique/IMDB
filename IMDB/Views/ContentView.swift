@@ -77,7 +77,7 @@ struct ResultView: View {
         case let .list(items):
             List(items.search, id: \.self, selection: $selectedItem) { item in
                 
-                NavigationLink(destination: MovieDetailView(imdbID: item.imdbID).environment(\.managedObjectContext, persistenceController.container.viewContext)) {
+                NavigationLink(destination: MovieDetailView(imdbID: item.imdbID)) {
                     HStack(alignment: .center, spacing: 10) {
                         URLImage(urlString: item.poster)
                         VStack(alignment: .leading, spacing: 10) {
@@ -88,6 +88,7 @@ struct ResultView: View {
                     }
                 }
             }
+            .listRowInsets(EdgeInsets())
             
         case let .detail(detail):
             ProgressView()
@@ -96,10 +97,10 @@ struct ResultView: View {
             ZStack {
                 Text(error.Error)
             }
-        case .unknown:
-            ProgressView()
-        case .none:
-            ProgressView()
+        case .unknown, .none:
+            ZStack {
+//                Text("")
+            }
         }
     }
 }
