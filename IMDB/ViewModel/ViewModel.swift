@@ -14,12 +14,11 @@ class ViewModel: ObservableObject {
 
     func fetch() {
 
-        let base: String = "https://www.omdbapi.com/"
 
         let queryString: [String: String] = ["apikey": Constants.apiKey,
                                              "s": movieTitle]
 
-        let endpoint =  Endpoint<ResponseType>(json: .get, url: URL(string: base)!, query: queryString)
+        let endpoint =  Endpoint<ResponseType>(json: .get, url: URL(string: Constants.base)!, query: queryString)
 
         URLSession.shared.load(endpoint) { result in
           switch result {
@@ -34,6 +33,4 @@ class ViewModel: ObservableObject {
           }
         }
     }
-    
- 
 }

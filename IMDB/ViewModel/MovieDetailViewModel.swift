@@ -23,12 +23,11 @@ class MovieDetailViewModel: ObservableObject {
 
     func fetchDetail() {
 
-        let base: String = "https://www.omdbapi.com/"
 
         let queryString: [String: String] = ["apikey": Constants.apiKey,
                                              "i": imdbID]
 
-        let endpoint = Endpoint<MovieDetail>(json: .get, url: URL(string: base)!, query: queryString)
+        let endpoint = Endpoint<MovieDetail>(json: .get, url: URL(string: Constants.base)!, query: queryString)
 
         URLSession.shared.load(endpoint) { result in
           switch result {

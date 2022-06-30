@@ -17,6 +17,9 @@ struct FavourtiesView: View {
         private var movies: FetchedResults<Movie>
 
     var body: some View {
+        
+        
+        if movies.count > 0 {
             List {
                 ForEach(movies) { item in
                     HStack(alignment: .center, spacing: 5) {
@@ -41,13 +44,15 @@ struct FavourtiesView: View {
                     }
                     .listRowInsets(EdgeInsets())
                 }.onDelete(perform: deleteItems)
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+            } .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
                 }
-            }
+        } else {
+            Text("List is empty")
+        }
     }
     
     private func deleteItems(offsets: IndexSet) {
