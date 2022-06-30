@@ -16,6 +16,7 @@ struct IMDBApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            
         }
     }
 }

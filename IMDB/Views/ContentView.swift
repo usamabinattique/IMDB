@@ -29,15 +29,22 @@ struct ContentView: View {
                 
                 .navigationTitle(searching ? "Searching" : "Movies")
 
-//                 adding cancel button to the navigation bar
+                //                 adding cancel button to the navigation bar
                 .toolbar {
-                    if searching {
-                        Button("Cancel") {
-                            viewModel.movieTitle = ""
-                            withAnimation {
-                                searching = false
-                                UIApplication.shared.dismissKeyboard()
+                    
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        if searching {
+                            Button("Cancel") {
+                                viewModel.movieTitle = ""
+                                withAnimation {
+                                    searching = false
+                                    UIApplication.shared.dismissKeyboard()
+                                }
                             }
+                        }
+                        
+                        NavigationLink(destination: FavourtiesView()) {
+                            Image(systemName: "suit.heart.fill")
                         }
                     }
                 }
@@ -59,14 +66,16 @@ struct ResultView: View {
     @State var selectedItem: MovieID? = nil 
     
     @State var isActive: Bool? = nil
-
+    
+    let persistenceController = PersistenceController.shared
+    
     var body: some View {
         switch viewModel.responseType  {
             
         case let .list(items):
             List(items.search, id: \.self, selection: $selectedItem) { item in
                 
-                NavigationLink(destination: MovieDetailView(imdbID: item.imdbID)) {
+                NavigationLink(destination: MovieDetailView(imdbID: item.imdbID).environment(\.managedObjectContext, persistenceController.container.viewContext)) {
                     HStack(alignment: .center, spacing: 10) {
                         URLImage(urlString: item.poster)
                         VStack(alignment: .leading, spacing: 10) {

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MovieDetailView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel: MovieDetailViewModel
     @State private var presentSheet = false
 
@@ -43,9 +44,6 @@ struct MovieDetailView: View {
                     }
                 }
                 
-              
-
-                
             } else {
                 Text("No Details found").bold()
             }
@@ -55,8 +53,9 @@ struct MovieDetailView: View {
                     if viewModel.showToolbar {
                         
                         HStack {
-                            
-                            Button{ }
+                            Button {
+                                addItem()
+                            }
                             label: {
                             Image(systemName: "heart")
                             }
@@ -84,6 +83,47 @@ struct MovieDetailView: View {
             viewModel.fetchDetail()
         }
     }
+    
+    private func addItem() {
+        withAnimation {
+            let newItem = Movie(context: viewContext)
+            newItem.title = viewModel.detail!.title
+            newItem.year = Int16(viewModel.detail!.year)!
+            newItem.poster = viewModel.detail!.poster
+            newItem.imdbRating = Float(viewModel.detail!.imdbRating)!
+            newItem.releaseDate = viewModel.detail!.released
+            
+            print(newItem)
+
+            do {
+                try viewContext.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+
+//    private func deleteItems(offsets: IndexSet) {
+//
+//
+//
+//        private let items: FetchedResults<Movie>
+//        withAnimation {
+//            offsets.map { items[$0] }.forEach(viewContext.delete)
+//
+//            do {
+//                try viewContext.save()
+//            } catch {
+//                // Replace this implementation with code to handle the error appropriately.
+//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nsError = error as NSError
+//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+//            }
+//        }
+//    }
 }
 
 struct MovieDetailView_Previews: PreviewProvider {
