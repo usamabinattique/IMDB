@@ -56,11 +56,11 @@ struct MovieDetailView: View {
                         
                         HStack {
                             Button {
-                                self.isFavorited.toggle()
-                                isFavorited ? viewModel.addItem() : viewModel.deleteItem()
+                                viewModel.isFavourite.toggle()
+                                viewModel.isFavourite ? viewModel.addItem() : viewModel.deleteItem()
                             }
                             label: {
-                                Image(systemName: isFavorited ? "heart.fill" : "heart")
+                                Image(systemName: viewModel.isFavourite ? "heart.fill" : "heart")
                             }
                             
                             Button("Share") {

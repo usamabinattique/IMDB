@@ -12,6 +12,7 @@ class MovieDetailViewModel: ObservableObject {
 
     @Published var detail: MovieDetail?
     @Published var showToolbar: Bool = false
+    @Published var isFavourite = false
     
     let viewContext = PersistenceController.shared.container.viewContext
 
@@ -35,6 +36,7 @@ class MovieDetailViewModel: ObservableObject {
               DispatchQueue.main.async {
                   self.showToolbar = true
                   self.detail = detail
+                  self.checkIfExists()
               }
           case let .failure(error):
               DispatchQueue.main.async {
@@ -80,6 +82,23 @@ class MovieDetailViewModel: ObservableObject {
             }
             
             try viewContext.save()
+        } catch {
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+    
+    private func checkIfExists() {
+        let movieRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
+        movieRequest.predicate = NSPredicate.init(format: "imdbID=%@", detail!.imdbID)
+        
+        do {
+            let savedMovie = try  self.viewContext.fetch(movieRequest)
+            
+            if savedMovie.count > 0 {
+                isFavourite = true
+            }
         } catch {
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
