@@ -14,6 +14,8 @@ struct ContentView: View {
     let fruits = ["adsf", "akdhf"]
     
     @State var searching = false
+    let persistenceController = PersistenceController.shared
+
 
     var body: some View {
         
@@ -43,7 +45,7 @@ struct ContentView: View {
                             }
                         }
                         
-                        NavigationLink(destination: FavourtiesView()) {
+                        NavigationLink(destination: FavourtiesView().environment(\.managedObjectContext, persistenceController.container.viewContext)) {
                             Image(systemName: "suit.heart.fill")
                         }
                     }

@@ -11,6 +11,8 @@ struct MovieDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel: MovieDetailViewModel
     @State private var presentSheet = false
+    @State var isFavorited : Bool = false
+
 
     // injecting view model
     init(imdbID: String) {
@@ -54,10 +56,11 @@ struct MovieDetailView: View {
                         
                         HStack {
                             Button {
-                                addItem()
+                                self.isFavorited.toggle()
+                                isFavorited ? addItem() : deleteItem(detail: viewModel.detail!)
                             }
                             label: {
-                            Image(systemName: "heart")
+                                Image(systemName: isFavorited ? "heart.fill" : "heart")
                             }
                             
                             Button("Share") {
@@ -72,8 +75,8 @@ struct MovieDetailView: View {
                                         }
                                     }
                                 }
+                                
                                 Button("Whatsapp") {}
-
                             }
                         }
                     }
@@ -106,11 +109,42 @@ struct MovieDetailView: View {
         }
     }
 
+
+    private func deleteItem(detail: MovieDetail) {
+
+        
+        
+//        @FetchRequest(entity: Movie.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Movie.title, ascending: true)]) var movie: FetchedResults<Movie>
+//
+//        print(movie.first)
+//
+//
+//        if let movie = try? viewContext.existingObject(with: NSManagedObjectID) as? Movie {
+//                self.person = person
+//            }
+
+        withAnimation {
+            
+
+//            viewContext.delete
+//            offsets.map { items[$0] }.forEach(viewContext.delete)
+            
+//            viewContext.delete(movie.first!)
+
+            do {
+                try viewContext.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+
 //    private func deleteItems(offsets: IndexSet) {
 //
-//
-//
-//        private let items: FetchedResults<Movie>
+//        let items: FetchedResults<Movie>
 //        withAnimation {
 //            offsets.map { items[$0] }.forEach(viewContext.delete)
 //
